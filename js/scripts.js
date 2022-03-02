@@ -49,7 +49,7 @@ const assetsPath = '';
 
 var videoTrack;
 let gaussianBlurProcessor;
-let virtualBackgroundProcessor;
+// let virtualBackgroundProcessor;
 
 
 
@@ -103,10 +103,10 @@ function playvid() {
         tracks.forEach(function (track) {
             console.log(track);
             window.videoTrack = track;
-            setVirtualBg();
-           setTimeout(() => {
-            track.attach(videoInput); 
-           }, 500);
+            setVirtualBg(track);
+        //    setTimeout(() => {
+        //     track.attach(videoInput); 
+        //    }, 0);
 
             if (track.name == 'camera') {
 
@@ -124,37 +124,46 @@ const setProcessor = (processor, track) => {
         // removeProcessorButton.disabled = true;
         track.removeProcessor(track.processor);
     }
-    if (processor) {
+    if (processor && track) {
         // removeProcessorButton.disabled = false;
         track.addProcessor(processor);
     }
 };
 
-async function setVirtualBg() {
+async function setVirtualBg(track) {
     const options = {};
     
     let backgroundImage = images['back5'];
     console.log(backgroundImage)
 
     let { maskBlurRadius, fitType } = options;
-    if (!virtualBackgroundProcessor) {
-        virtualBackgroundProcessor = new VirtualBackgroundProcessor({
-            assetsPath,
-            maskBlurRadius,
-            backgroundImage,
-            fitType,
-        });
-        await virtualBackgroundProcessor.loadModel();
-        overlay.style.display = 'block';
+    // if (!virtualBackgroundProcessor) {
+    //     virtualBackgroundProcessor = new VirtualBackgroundProcessor({
+    //         assetsPath,
+    //         maskBlurRadius,
+    //         backgroundImage,
+    //         fitType,
+    //     });
+    //     await virtualBackgroundProcessor.loadModel();
+    //     overlay.style.display = 'block';
 
-    } else {
-        virtualBackgroundProcessor.backgroundImage = backgroundImage;
-        virtualBackgroundProcessor.fitType = fitType;
-        virtualBackgroundProcessor.maskBlurRadius = maskBlurRadius;
-    }
+    // } else {
+    //     virtualBackgroundProcessor.backgroundImage = backgroundImage;
+    //     virtualBackgroundProcessor.fitType = fitType;
+    //     virtualBackgroundProcessor.maskBlurRadius = maskBlurRadius;
+    // }
+  let  virtualBackgroundProcessor = new VirtualBackgroundProcessor({
+        assetsPath,
+        maskBlurRadius,
+        backgroundImage,
+        fitType,
+    });
+    await virtualBackgroundProcessor.loadModel();
+    overlay.style.display = 'block'; 
 
     setProcessor(virtualBackgroundProcessor, videoTrack);
     overlay.style.display = 'block';
+    track.attach(videoInput); 
 }
 
 virtualBackgroundButton.onclick = event => {
@@ -255,17 +264,22 @@ video.addEventListener('loadedmetadata', function () {
 
 video.addEventListener('play', function () {
     var $this = this; //cache
+    console.log('play');
+         
     let width = video.videoWidth;
     let height = video.videoHeight;
     let scaleVal = 0.25;
     let size = 0.60;
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     (function loop() {
+        console.log('loop');
+         
         if (!$this.paused && !$this.ended) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, width, height);
             ctx.drawImage($this, width * scaleVal, height * scaleVal, width * size, height * size);
             setTimeout(loop, 1000 / 30); // drawing at 30fps
+            // window.requestAnimationFrame(loop);
         }
     })();
 }, 0);
