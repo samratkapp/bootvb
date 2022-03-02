@@ -87,7 +87,7 @@ function playvid() {
     btnrecord.disabled = false;
     videoTrack;
      
-    setVirtualBg();
+    
 
     Video.createLocalTracks({
         audio: {
@@ -99,6 +99,7 @@ function playvid() {
             deviceId: document.querySelector('select#videoSource').value
         }
     }).then(function (tracks) {
+        setVirtualBg();
         tracks.forEach(function (track) {
             console.log(track);
             window.videoTrack = track;
@@ -143,9 +144,9 @@ async function setVirtualBg() {
         overlay.style.display = 'block';
 
     } else {
-        // virtualBackgroundProcessor.backgroundImage = backgroundImage;
-        // virtualBackgroundProcessor.fitType = fitType;
-        // virtualBackgroundProcessor.maskBlurRadius = maskBlurRadius;
+        virtualBackgroundProcessor.backgroundImage = backgroundImage;
+        virtualBackgroundProcessor.fitType = fitType;
+        virtualBackgroundProcessor.maskBlurRadius = maskBlurRadius;
     }
 
     setProcessor(virtualBackgroundProcessor, videoTrack);
