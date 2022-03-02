@@ -99,11 +99,15 @@ function playvid() {
             deviceId: document.querySelector('select#videoSource').value
         }
     }).then(function (tracks) {
-        setVirtualBg();
+        
         tracks.forEach(function (track) {
             console.log(track);
             window.videoTrack = track;
-            track.attach(videoInput);
+            setVirtualBg();
+           setTimeout(() => {
+            track.attach(videoInput); 
+           }, 500);
+
             if (track.name == 'camera') {
 
             }
@@ -166,6 +170,7 @@ function removeBg() {
     setProcessor(null, videoTrack);
 }
 stopvid.onclick = event => {
+    playvidBtn.disabled = false;
     stream = videoInput.srcObject;
     // now get all tracks
     tracks = stream.getTracks();
@@ -178,9 +183,7 @@ stopvid.onclick = event => {
     // assign null to srcObject of video
     videoInput.srcObject = null;
     videoInput.src = '';
-    // ctx.setTransform(1, 0, 0, 1, 0, 0);
-    // ctx.clearRect(0, 0, video.videoWidth, video.videoHeight);
-    // ctx.drawImage(null, 0, 0, video.videoWidth, video.videoHeight); 
+    document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/back1.jpg)`;
 };
 
 
