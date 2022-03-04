@@ -81,6 +81,10 @@
         #audioSource {
             display: none;
         }
+        #videoSource {
+            /* display: none; */
+        }
+        
         #virtualBackground-Apply{
             display: none;
         }
@@ -112,16 +116,8 @@
                     <!-- <p class="text-white m-0"> -->
                     <select id="videoSource"></select>
                     <select id="audioSource"></select>
-                     
-                    <button id="playvidBtn" onclick="playvid()" class="btn btn-primary btn-sm"><i class="fa fa-video-camera" aria-hidden="true"></i> </button>
-                    <button id="stopvid" class="btn btn-primary btn-sm"><i class="fa fa-stop-circle-o" aria-hidden="true"></i></button>
-                    <button id="virtualBackground-Apply" class="btn btn-primary btn-sm">Apply</button>
-                    <!-- <button id="remove-processor" class="btn btn-primary btn-sm">Remove </button> -->
-                    <button id="btnrecord" class="btn btn-primary btn-sm">Start Recording </button>
-                    <button id="btnrecordstop" class="btn btn-primary btn-sm">Stop Recording </button>
-
-                    <!-- <div class="row"> -->
-                    <div class="columnimg">
+                     <br><br>
+                     <div class="columnimg">
                         <img src="./backgrounds/back1.jpg" name="bgImage" class="selected"
                             onclick="setSelectBackground(this,'back1')" style="width:100%">
                     </div>
@@ -141,6 +137,15 @@
                         <img src="./backgrounds/back5.jpg" name="bgImage" onclick="setSelectBackground(this,'back5')"
                             style="width:100%">
                     </div>
+                    <button id="playvidBtn" onclick="playvid()" class="btn btn-primary btn-sm"><i class="fa fa-video-camera" aria-hidden="true"></i> Capture</button>
+                    <button id="stopvid" class="btn btn-primary btn-sm"><i class="fa fa-stop-circle-o" aria-hidden="true"></i> Stop</button>
+                    <button id="virtualBackground-Apply" class="btn btn-primary btn-sm">Apply</button>
+                    <!-- <button id="remove-processor" class="btn btn-primary btn-sm">Remove </button> -->
+                    <button id="btnrecord" class="btn btn-primary btn-sm">Start Recording </button>
+                    <button id="btnrecordstop" class="btn btn-primary btn-sm">Stop Recording </button>
+
+                    <!-- <div class="row"> -->
+                    
                     <!-- </div> -->
                     <!-- </p> -->
                     <form id="virtualBackground-Form">
