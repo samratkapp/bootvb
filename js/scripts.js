@@ -283,7 +283,7 @@ function buildCanvas() {
             ctx.clearRect(0, 0, width, height);
             ctxDraw(`./backgrounds/${bgImage}.jpg`, 0, 0, canvas.width, canvas.height);
             ctx.drawImage(video, width * scaleVal, 15, width * 0.4, height * 0.60);
-            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * 0.35, canvas.height * 0.5, 250, 250);
+            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * 0.32, canvas.height * 0.5, 250, 250);
             // stopLoop = setTimeout(loop, 0); // drawing at 30fps
             myReq = window.requestAnimationFrame(loop);
         }
