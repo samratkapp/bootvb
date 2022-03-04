@@ -188,7 +188,7 @@ stopvid.onclick = event => {
 /****** Recording ******/
 let recorder;
 const btnrecord = document.querySelector('button#btnrecord');
-const btnrecordstop = document.querySelector('button#btnrecordstop'); 
+const btnrecordstop = document.querySelector('button#btnrecordstop');
 
 btnrecord.disabled = true;
 btnrecordstop.disabled = true;
@@ -219,14 +219,14 @@ btnrecord.onclick = async function () {
 
 }
 
-btnrecordstop.onclick = function () {  
+btnrecordstop.onclick = function () {
     console.log(btnrecordstop);
     btnrecordstop.disabled = false;
     btnrecord.disabled = false;
     recorder.stopRecording(function () {
         let blob = recorder.getBlob();
         invokeSaveAsDialog(blob);
-       
+
     });
 }
 
@@ -240,7 +240,7 @@ function setSelectBackground(event, value) {
     event.classList.add("selected");
     bgImage = value;
     // document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
-    buildCanvas(); 
+    buildCanvas();
 }
 
 /****INVOKE FUNCTION****/
@@ -250,17 +250,17 @@ function setSelectBackground(event, value) {
 /***CANVAS IMAGE****/
 
 
-var ctx = canvas.getContext('2d'); 
+var ctx = canvas.getContext('2d');
 
 function ctxDraw(url = null, posX = 0, posY = 0, width = 100, height = 100) {
     let img = new Image();
     img.src = url;
     ctx.drawImage(img, posX, posY, width, height);
 }
- 
+
 video.addEventListener('loadedmetadata', function () {
     canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;  
+    canvas.height = video.videoHeight;
 });
 
 var stopLoop;
@@ -271,10 +271,19 @@ function buildCanvas() {
 
     let width = video.videoWidth;
     let height = video.videoHeight;
-    let scaleVal = 0.32;
+    let scaleVal = 0.28;
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    let posX = 0.28;
+    let posY = 0.5;
+    let vposX = width * scaleVal;
+    let vposY = 15;
+    if (canvas.width < canvas.height) {
+        posX = 0.32;
+        posY = 0.7; 
+        vposX = width * 0.32;
+        vposY = height * 0.25;
+    }
     function loop() {
         console.log('loop');
 
@@ -282,8 +291,9 @@ function buildCanvas() {
             // ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, width, height);
             ctxDraw(`./backgrounds/${bgImage}.jpg`, 0, 0, canvas.width, canvas.height);
-            ctx.drawImage(video, width * scaleVal, 15, width * 0.4, height * 0.60);
-            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * 0.32, canvas.height * 0.5, 250, 250);
+            ctx.drawImage(video, vposX, vposY, width * 0.4, height * 0.60);
+
+            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * posX, canvas.height * posY, 250, 250);
             // stopLoop = setTimeout(loop, 0); // drawing at 30fps
             myReq = window.requestAnimationFrame(loop);
         }
