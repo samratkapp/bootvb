@@ -86,8 +86,8 @@ function playvid() {
     virtualBackgroundButton.disabled = false;
     btnrecord.disabled = false;
     videoTrack;
-     
-    
+
+
 
     Video.createLocalTracks({
         audio: {
@@ -99,14 +99,14 @@ function playvid() {
             deviceId: document.querySelector('select#videoSource').value
         }
     }).then(function (tracks) {
-        
+
         tracks.forEach(function (track) {
             console.log(track);
             window.videoTrack = track;
             setVirtualBg(track);
-        //    setTimeout(() => {
-        //     track.attach(videoInput); 
-        //    }, 0);
+            //    setTimeout(() => {
+            //     track.attach(videoInput); 
+            //    }, 0);
 
             if (track.name == 'camera') {
 
@@ -132,38 +132,24 @@ const setProcessor = (processor, track) => {
 
 async function setVirtualBg(track) {
     const options = {};
-    
+
     let backgroundImage = images['back5'];
     console.log(backgroundImage)
 
     let { maskBlurRadius, fitType } = options;
-    // if (!virtualBackgroundProcessor) {
-    //     virtualBackgroundProcessor = new VirtualBackgroundProcessor({
-    //         assetsPath,
-    //         maskBlurRadius,
-    //         backgroundImage,
-    //         fitType,
-    //     });
-    //     await virtualBackgroundProcessor.loadModel();
-    //     overlay.style.display = 'block';
 
-    // } else {
-    //     virtualBackgroundProcessor.backgroundImage = backgroundImage;
-    //     virtualBackgroundProcessor.fitType = fitType;
-    //     virtualBackgroundProcessor.maskBlurRadius = maskBlurRadius;
-    // }
-  let  virtualBackgroundProcessor = new VirtualBackgroundProcessor({
+    let virtualBackgroundProcessor = new VirtualBackgroundProcessor({
         assetsPath,
         maskBlurRadius,
         backgroundImage,
         fitType,
     });
     await virtualBackgroundProcessor.loadModel();
-    overlay.style.display = 'block'; 
+    overlay.style.display = 'block';
 
     setProcessor(virtualBackgroundProcessor, videoTrack);
     overlay.style.display = 'block';
-    track.attach(videoInput); 
+    track.attach(videoInput);
 }
 
 virtualBackgroundButton.onclick = event => {
@@ -172,13 +158,16 @@ virtualBackgroundButton.onclick = event => {
     virtualBackgroundButton.disabled = true;
     // setVirtualBg();
 };
- 
+
 function removeBg() {
     overlay.style.display = 'none';
     // videoTrack.removeProcessor(videoTrack.processor);
     setProcessor(null, videoTrack);
 }
 stopvid.onclick = event => {
+    // clearTimeout(stopLoop);
+    // the cancellation uses the last requestId
+    cancelAnimationFrame(myReq);
     playvidBtn.disabled = false;
     stream = videoInput.srcObject;
     // now get all tracks
@@ -192,7 +181,7 @@ stopvid.onclick = event => {
     // assign null to srcObject of video
     videoInput.srcObject = null;
     videoInput.src = '';
-    document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/back1.jpg)`;
+    ctxDraw("./backgrounds/back1.jpg", 0, 0, canvas.width, canvas.height);
 };
 
 
@@ -210,13 +199,22 @@ btnrecord.onclick = async function () {
     btnrecord.disabled = true;
     btnrecordstop.disabled = false;
 
-    let stream = videoInput.srcObject;
-
+    let vstream = videoInput.srcObject;
+    let canvasStream = canvas.captureStream(60);
     // console.log(videoTrack);
 
-    console.log(stream);
+    var finalStream = new MediaStream();
 
-    recorder = RecordRTC(stream, {
+    getTracks(vstream, 'audio').forEach(function (track) {
+        canvasStream.addTrack(track);
+    });
+    // getTracks(canvasStream, 'video').forEach(function (track) {
+    //     finalStream.addTrack(track);
+    // });
+
+    console.log(canvasStream);
+
+    recorder = RecordRTC(canvasStream, {
         type: 'video'
     });
     recorder.startRecording();
@@ -233,7 +231,7 @@ btnrecordstop.onclick = function () {
     });
 }
 
-
+let bgImage = "back1";
 function setSelectBackground(event, value) {
     virtualBackgroundButton.disabled = false;
     // document.getElementById("backgroundImage").value = value;
@@ -241,9 +239,9 @@ function setSelectBackground(event, value) {
     var selectedImg = document.querySelector("img.selected");
     selectedImg.classList.remove("selected");
     event.classList.add("selected");
-
-    document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
-
+    bgImage = value;
+    // document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
+    buildCanvas();
 
 }
 
@@ -256,30 +254,78 @@ function setSelectBackground(event, value) {
 
 var ctx = canvas.getContext('2d');
 
+
+function ctxDraw(url = null, posX = 0, posY = 0, width = 100, height = 100) {
+    let img = new Image();
+    img.src = url;
+    ctx.drawImage(img, posX, posY, width, height);
+}
+
+
+
 video.addEventListener('loadedmetadata', function () {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
+
+
+
 });
 
-
-video.addEventListener('play', function () {
+var stopLoop;
+var myReq;
+function buildCanvas() {
     var $this = this; //cache
     console.log('play');
-         
+
     let width = video.videoWidth;
     let height = video.videoHeight;
-    let scaleVal = 0.25;
+    let scaleVal = 0.32;
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    (function loop() {
+
+    function loop() {
         console.log('loop');
-         
+
         if (!$this.paused && !$this.ended) {
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            // ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, width, height);
-            ctx.drawImage($this, width * scaleVal, height * scaleVal, width * size, height * size);
-            setTimeout(loop, 1000 / 30); // drawing at 30fps
-            // window.requestAnimationFrame(loop);
+            ctxDraw(`./backgrounds/${bgImage}.jpg`, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(video, width * scaleVal, 15, width * 0.4, height * 0.60);
+            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * 0.30, canvas.height * 0.5, 250, 250);
+            // stopLoop = setTimeout(loop, 0); // drawing at 30fps
+            myReq = window.requestAnimationFrame(loop);
         }
-    })();
+    }
+    loop();
+
+}
+
+video.addEventListener('play', function () {
+    buildCanvas();
 }, 0);
+
+
+
+
+// var videoStream = canvas.captureStream(30);
+// var mediaRecorder = new MediaRecorder(videoStream);
+
+// var chunks = [];
+// mediaRecorder.ondataavailable = function (e) {
+//     chunks.push(e.data);
+// };
+
+// mediaRecorder.onstop = function (e) {
+//     var blob = new Blob(chunks, { 'type': 'video/mp4' });
+//     chunks = [];
+//     invokeSaveAsDialog(blob);
+//     //   var videoURL = URL.createObjectURL(blob);
+//     //   video.src = videoURL;
+// };
+// mediaRecorder.ondataavailable = function (e) {
+//     chunks.push(e.data);
+// };
+
+// mediaRecorder.start();
+
+// setTimeout(function () { mediaRecorder.stop(); }, 18000);
