@@ -279,7 +279,7 @@ function buildCanvas() {
     let vposX = width * scaleVal;
     let vposY = 15;
     if (canvas.width < canvas.height) {
-        posX = width * 0.28;
+        posX = width * 0.25;
         posY = height * 0.7;
         vposX = width * 0.32;
         vposY = height * 0.25;
