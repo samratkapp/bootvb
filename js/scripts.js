@@ -274,13 +274,13 @@ function buildCanvas() {
     let scaleVal = 0.28;
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let posX = 0.28;
-    let posY = 0.5;
+    let posX = width * 0.28;
+    let posY = height * 0.5;
     let vposX = width * scaleVal;
     let vposY = 15;
     if (canvas.width < canvas.height) {
-        posX = 0.30;
-        posY = 0.7; 
+        posX = width * 0.28;
+        posY = height * 0.7;
         vposX = width * 0.32;
         vposY = height * 0.25;
     }
@@ -293,7 +293,7 @@ function buildCanvas() {
             ctxDraw(`./backgrounds/${bgImage}.jpg`, 0, 0, canvas.width, canvas.height);
             ctx.drawImage(video, vposX, vposY, width * 0.4, height * 0.60);
 
-            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * posX, canvas.height * posY, 250, 250);
+            ctxDraw("./backgrounds/mic/4.jpeg", posX, posY, 250, 250);
             // stopLoop = setTimeout(loop, 0); // drawing at 30fps
             myReq = window.requestAnimationFrame(loop);
         }
