@@ -168,6 +168,7 @@ stopvid.onclick = event => {
     // clearTimeout(stopLoop);
     // the cancellation uses the last requestId
     cancelAnimationFrame(myReq);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     playvidBtn.disabled = false;
     stream = videoInput.srcObject;
     // now get all tracks
@@ -181,6 +182,7 @@ stopvid.onclick = event => {
     // assign null to srcObject of video
     videoInput.srcObject = null;
     videoInput.src = '';
+    
     ctxDraw("./backgrounds/back1.jpg", 0, 0, canvas.width, canvas.height);
 };
 
@@ -206,12 +208,7 @@ btnrecord.onclick = async function () {
     getTracks(vstream, 'audio').forEach(function (track) {
         canvasStream.addTrack(track);
     });
-    // getTracks(canvasStream, 'video').forEach(function (track) {
-    //     finalStream.addTrack(track);
-    // });
-
-    console.log(canvasStream);
-
+   
     recorder = RecordRTC(canvasStream, {
         type: 'video'
     });
