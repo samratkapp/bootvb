@@ -41,6 +41,9 @@ const playvidBtn = document.querySelector('button#playvidBtn');
 
 let canvas = window.canvas = document.querySelector('canvas');
 
+const divBgi = document.querySelector('div#divBgi');
+divBgi.style.display='none';
+
 stopvid.disabled = true;
 virtualBackgroundButton.disabled = true;
 
@@ -80,7 +83,8 @@ Promise.all([
 let video = document.querySelector('video');
 
 function playvid() {
-    // overlay.style.display = 'block';
+    divBgi.style.display='block';
+    
     playvidBtn.disabled = true;
     stopvid.disabled = false;
     virtualBackgroundButton.disabled = false;
@@ -165,25 +169,30 @@ function removeBg() {
     setProcessor(null, videoTrack);
 }
 stopvid.onclick = event => {
+    divBgi.style.display='none';
     // clearTimeout(stopLoop);
     // the cancellation uses the last requestId
-    cancelAnimationFrame(myReq);
+    window.cancelAnimationFrame(myReq);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ctxDraw("./backgrounds/back1.jpg", 0, 0, canvas.width, canvas.height);
     playvidBtn.disabled = false;
     stream = videoInput.srcObject;
     // now get all tracks
-    tracks = stream.getTracks();
+    tracks = (stream && stream.getTracks()) ? stream.getTracks() : null;
     // overlay.style.display = 'none';
     // now close each track by having forEach loop
-    tracks.forEach(function (track) {
-        // stopping every track
-        track.stop();
-    });
+    if (tracks) {
+        tracks.forEach(function (track) {
+            // stopping every track
+            track.stop();
+        });
+    }
+
     // assign null to srcObject of video
     videoInput.srcObject = null;
     videoInput.src = '';
-    
-    ctxDraw("./backgrounds/back1.jpg", 0, 0, canvas.width, canvas.height);
+
 };
 
 
@@ -208,7 +217,7 @@ btnrecord.onclick = async function () {
     getTracks(vstream, 'audio').forEach(function (track) {
         canvasStream.addTrack(track);
     });
-   
+
     recorder = RecordRTC(canvasStream, {
         type: 'video'
     });
@@ -236,7 +245,7 @@ function setSelectBackground(event, value) {
     selectedImg.classList.remove("selected");
     event.classList.add("selected");
     bgImage = value;
-    // document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
+    document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
     buildCanvas();
 }
 
@@ -267,7 +276,7 @@ function buildCanvas() {
     console.log('play');
 
     let width = video.videoWidth;
-    let height = video.videoHeight; 
+    let height = video.videoHeight;
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let posX = width * 0.28;
@@ -303,27 +312,3 @@ video.addEventListener('play', function () {
 }, 0);
 
 
-
-
-// var videoStream = canvas.captureStream(30);
-// var mediaRecorder = new MediaRecorder(videoStream);
-
-// var chunks = [];
-// mediaRecorder.ondataavailable = function (e) {
-//     chunks.push(e.data);
-// };
-
-// mediaRecorder.onstop = function (e) {
-//     var blob = new Blob(chunks, { 'type': 'video/mp4' });
-//     chunks = [];
-//     invokeSaveAsDialog(blob);
-//     //   var videoURL = URL.createObjectURL(blob);
-//     //   video.src = videoURL;
-// };
-// mediaRecorder.ondataavailable = function (e) {
-//     chunks.push(e.data);
-// };
-
-// mediaRecorder.start();
-
-// setTimeout(function () { mediaRecorder.stop(); }, 18000);
