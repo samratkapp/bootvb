@@ -270,13 +270,12 @@ function buildCanvas() {
     console.log('play');
 
     let width = video.videoWidth;
-    let height = video.videoHeight;
-    let scaleVal = 0.28;
+    let height = video.videoHeight; 
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let posX = width * 0.28;
     let posY = height * 0.5;
-    let vposX = width * scaleVal;
+    let vposX = width * 0.30;
     let vposY = 15;
     if (canvas.width < canvas.height) {
         posX = width * 0.23;
@@ -291,7 +290,7 @@ function buildCanvas() {
             // ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, width, height);
             ctxDraw(`./backgrounds/${bgImage}.jpg`, 0, 0, canvas.width, canvas.height);
-            ctx.drawImage(video, vposX, vposY, width * 0.38, height * 0.62);
+            ctx.drawImage(video, vposX, vposY, width * 0.35, height * 0.62);
 
             ctxDraw("./backgrounds/mic/4.jpeg", posX, posY, 256, 250);
             // stopLoop = setTimeout(loop, 0); // drawing at 30fps
