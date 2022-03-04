@@ -35,7 +35,7 @@ const videoInput = document.querySelector('video#video-input');
 const removeProcessorButton = document.querySelector('button#remove-processor');
 // const errorMessage = document.querySelector('div.modal-body');
 // const errorModal = new bootstrap.Modal(document.querySelector('div#errorModal'));
-const overlay = document.querySelector('div#overlay');
+// const overlay = document.querySelector('div#overlay');
 const stopvid = document.querySelector('button#stopvid');
 const playvidBtn = document.querySelector('button#playvidBtn');
 
@@ -80,7 +80,7 @@ Promise.all([
 let video = document.querySelector('video');
 
 function playvid() {
-    overlay.style.display = 'block';
+    // overlay.style.display = 'block';
     playvidBtn.disabled = true;
     stopvid.disabled = false;
     virtualBackgroundButton.disabled = false;
@@ -120,7 +120,7 @@ function playvid() {
 
 const setProcessor = (processor, track) => {
     if (track.processor) {
-        overlay.style.display = 'none';
+        // overlay.style.display = 'none';
         // removeProcessorButton.disabled = true;
         track.removeProcessor(track.processor);
     }
@@ -145,10 +145,10 @@ async function setVirtualBg(track) {
         fitType,
     });
     await virtualBackgroundProcessor.loadModel();
-    overlay.style.display = 'block';
+    // overlay.style.display = 'block';
 
     setProcessor(virtualBackgroundProcessor, videoTrack);
-    overlay.style.display = 'block';
+    // overlay.style.display = 'block';
     track.attach(videoInput);
 }
 
@@ -160,7 +160,7 @@ virtualBackgroundButton.onclick = event => {
 };
 
 function removeBg() {
-    overlay.style.display = 'none';
+    // overlay.style.display = 'none';
     // videoTrack.removeProcessor(videoTrack.processor);
     setProcessor(null, videoTrack);
 }
@@ -172,7 +172,7 @@ stopvid.onclick = event => {
     stream = videoInput.srcObject;
     // now get all tracks
     tracks = stream.getTracks();
-    overlay.style.display = 'none';
+    // overlay.style.display = 'none';
     // now close each track by having forEach loop
     tracks.forEach(function (track) {
         // stopping every track
@@ -188,9 +188,7 @@ stopvid.onclick = event => {
 /****** Recording ******/
 let recorder;
 const btnrecord = document.querySelector('button#btnrecord');
-const btnrecordstop = document.querySelector('button#btnrecordstop');
-
-
+const btnrecordstop = document.querySelector('button#btnrecordstop'); 
 
 btnrecord.disabled = true;
 btnrecordstop.disabled = true;
@@ -221,13 +219,14 @@ btnrecord.onclick = async function () {
 
 }
 
-btnrecordstop.onclick = function () {
-
-    btnrecord.disabled = true;
-    btnrecordstop.disabled = true;
+btnrecordstop.onclick = function () {  
+    console.log(btnrecordstop);
+    btnrecordstop.disabled = false;
+    btnrecord.disabled = false;
     recorder.stopRecording(function () {
         let blob = recorder.getBlob();
         invokeSaveAsDialog(blob);
+       
     });
 }
 
@@ -241,8 +240,7 @@ function setSelectBackground(event, value) {
     event.classList.add("selected");
     bgImage = value;
     // document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
-    buildCanvas();
-
+    buildCanvas(); 
 }
 
 /****INVOKE FUNCTION****/
@@ -252,23 +250,17 @@ function setSelectBackground(event, value) {
 /***CANVAS IMAGE****/
 
 
-var ctx = canvas.getContext('2d');
-
+var ctx = canvas.getContext('2d'); 
 
 function ctxDraw(url = null, posX = 0, posY = 0, width = 100, height = 100) {
     let img = new Image();
     img.src = url;
     ctx.drawImage(img, posX, posY, width, height);
 }
-
-
-
+ 
 video.addEventListener('loadedmetadata', function () {
     canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-
-
+    canvas.height = video.videoHeight;  
 });
 
 var stopLoop;
@@ -291,7 +283,7 @@ function buildCanvas() {
             ctx.clearRect(0, 0, width, height);
             ctxDraw(`./backgrounds/${bgImage}.jpg`, 0, 0, canvas.width, canvas.height);
             ctx.drawImage(video, width * scaleVal, 15, width * 0.4, height * 0.60);
-            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * 0.30, canvas.height * 0.5, 250, 250);
+            ctxDraw("./backgrounds/mic/4.jpeg", canvas.width * 0.35, canvas.height * 0.5, 250, 250);
             // stopLoop = setTimeout(loop, 0); // drawing at 30fps
             myReq = window.requestAnimationFrame(loop);
         }
