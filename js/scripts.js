@@ -42,7 +42,7 @@ const playvidBtn = document.querySelector('button#playvidBtn');
 let canvas = window.canvas = document.querySelector('canvas');
 
 const divBgi = document.querySelector('div#divBgi');
-divBgi.style.display = 'none';
+divBgi.style.display='none';
 
 stopvid.disabled = true;
 virtualBackgroundButton.disabled = true;
@@ -83,8 +83,8 @@ Promise.all([
 let video = document.querySelector('video');
 
 function playvid() {
-    divBgi.style.display = 'block';
-
+    divBgi.style.display='block';
+    
     playvidBtn.disabled = true;
     stopvid.disabled = false;
     virtualBackgroundButton.disabled = false;
@@ -169,7 +169,7 @@ function removeBg() {
     setProcessor(null, videoTrack);
 }
 stopvid.onclick = event => {
-    divBgi.style.display = 'none';
+    divBgi.style.display='none';
     // clearTimeout(stopLoop);
     // the cancellation uses the last requestId
     window.cancelAnimationFrame(myReq);
@@ -282,21 +282,20 @@ function buildCanvas() {
 
     let width = video.videoWidth;
     let height = video.videoHeight;
-
+    if (canvas.width < canvas.height) {
+        canvas.height=canvas.height*0.8;
+    }
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let posX = width * 0.28;
     let posY = height * 0.5;
     let vposX = width * 0.30;
     let vposY = 15;
-    console.log('width ==> ', width, ' height', height);
-    if (window.innerWidth < window.innerHeight) {
-        posX = width * 0.28;
-        posY = height * 0.37;
+    if (canvas.width < canvas.height) {
+        posX = width * 0.23;
+        posY = height * 0.7;
         vposX = width * 0.32;
-        vposY = height * 0.15;
-        
-        console.log('width', width, ' height', height);
+        vposY = height * 0.22;
     }
     function loop() {
         console.log('loop');
