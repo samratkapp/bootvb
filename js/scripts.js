@@ -212,14 +212,14 @@ btnrecord.onclick = async function () {
     let canvasStream = canvas.captureStream(60);
     // console.log(videoTrack);
 
-    var finalStream = new MediaStream();
+    // var finalStream = new MediaStream();
 
     getTracks(vstream, 'audio').forEach(function (track) {
         canvasStream.addTrack(track);
     });
 
     recorder = RecordRTC(canvasStream, {
-        type: 'video'
+        type: 'video',
     });
     recorder.startRecording();
 
@@ -231,7 +231,12 @@ btnrecordstop.onclick = function () {
     btnrecord.disabled = false;
     recorder.stopRecording(function () {
         let blob = recorder.getBlob();
-        invokeSaveAsDialog(blob);
+        const myFile = new File(
+            [blob],
+            "sample.mp4",
+            { type: 'video/mp4' }
+        );
+        invokeSaveAsDialog(myFile);
 
     });
 }
@@ -277,6 +282,9 @@ function buildCanvas() {
 
     let width = video.videoWidth;
     let height = video.videoHeight;
+    if (canvas.width < canvas.height) {
+        canvas.height=canvas.height*0.8;
+    }
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let posX = width * 0.28;

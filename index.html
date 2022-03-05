@@ -17,15 +17,6 @@
 
 
     <style>
-        .columnimg {
-            float: left;
-            /* height: 50px; */
-            width: 50px;
-            margin: 2px;
-            border: 2px solid rgb(209, 209, 133);
-        }
-
-
         #canvas {
             /* display:none; */
             border: 2px solid rgb(61, 50, 50);
@@ -94,6 +85,22 @@
         .btn {
             margin: 2px 2px;
         }
+
+        #divBgi {
+            margin:10px auto;
+            width: 50%;;
+        }
+        #divBgi img {
+            height: 50px;
+            width: 50px;
+        }
+        .divCenter {
+            margin:10px auto;
+            width: 50%;;
+        }
+        .btn button{
+           float: left;
+        }
     </style>
 </head>
 
@@ -123,45 +130,45 @@
                     <select id="videoSource"></select>
                     <select id="audioSource"></select>
                     <br>
-                    <div class="" id="divBgi">
-                        <div class="columnimg">
-                            <img src="./backgrounds/back1.jpg" name="bgImage" class="selected"
-                                onclick="setSelectBackground(this,'back1')" style="width:100%">
-                        </div>
-                        <div class="columnimg">
-                            <img src="./backgrounds/back2.jpg" name="bgImage"
-                                onclick="setSelectBackground(this,'back2')" style="width:100%">
-                        </div>
-                        <div class="columnimg">
-                            <img src="./backgrounds/back3.jpg" name="bgImage"
-                                onclick="setSelectBackground(this,'back3')" style="width:100%">
-                        </div>
-                        <div class="columnimg">
-                            <img src="./backgrounds/back4.jpg" name="bgImage"
-                                onclick="setSelectBackground(this,'back4')" style="width:100%">
-                        </div>
-                        <div class="columnimg" style="display: none;">
+                    <!-- columnimg -->
+
+                    <div class="row" id="divBgi">
+                        <!-- <div class=""> -->
+
+                        <img src="./backgrounds/back1.jpg" name="bgImage" class="selected"
+                            onclick="setSelectBackground(this,'back1')">
+
+                        <img src="./backgrounds/back2.jpg" name="bgImage" onclick="setSelectBackground(this,'back2')">
+
+                        <img src="./backgrounds/back3.jpg" name="bgImage" onclick="setSelectBackground(this,'back3')">
+
+                        <img src="./backgrounds/back4.jpg" name="bgImage" onclick="setSelectBackground(this,'back4')">
+                        <!-- </div> -->
+                        <!-- <div class=" " style="display: none;">
                             <img src="./backgrounds/back5.jpg" name="bgImage"
                                 onclick="setSelectBackground(this,'back5')" style="width:100%">
-                        </div>
-                         
+                        </div> -->
+                       
                     </div>
-                            <div>
-                                <button id="playvidBtn" onclick="playvid()" class="btn btn-primary btn-sm"><i
-                                        class="fa fa-video-camera" aria-hidden="true"></i> Capture</button>
-                                <button id="stopvid" class="btn btn-primary btn-sm"><i class="fa fa-stop-circle-o"
-                                        aria-hidden="true"></i> Stop</button>
-                                <button id="virtualBackground-Apply" class="btn btn-primary btn-sm">Apply</button>
-                                <!-- <button id="remove-processor" class="btn btn-primary btn-sm">Remove </button> -->
-                                <button id="btnrecord" class="btn btn-primary btn-sm">Start Recording </button>
-                                <button id="btnrecordstop" class="btn btn-primary btn-sm">Stop Recording </button>
-                            </div>
-                        
+                    <div class="form-group row">
+                        <div class="divCenter">
+                            <button id="playvidBtn" onclick="playvid()" class="btn btn-primary btn-sm"><i
+                                    class="fa fa-video-camera" aria-hidden="true"></i> Capture</button>
+                            <button id="stopvid" class="btn btn-primary btn-sm"><i class="fa fa-stop-circle-o"
+                                    aria-hidden="true"></i> Stop</button>
+                            <button id="virtualBackground-Apply" class="btn btn-primary btn-sm">Apply</button>
+                            <!-- <button id="remove-processor" class="btn btn-primary btn-sm">Remove </button> -->
+                            <button id="btnrecord" class="btn btn-primary btn-sm">Start Recording </button>
+                            <button id="btnrecordstop" class="btn btn-primary btn-sm">Stop Recording </button>
+                        </div>
+                    </div>
+
                     <!-- <div class="row"> -->
 
                     <!-- </div> -->
                     <!-- </p> -->
                     <form id="virtualBackground-Form">
+
                         <select style="display:none" class="form-control selectpicker" id="backgroundImage">
                             <option value="back1">Podium1</option>
                             <option value="back2">Podium2</option>
