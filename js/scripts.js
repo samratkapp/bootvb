@@ -282,9 +282,7 @@ function buildCanvas() {
 
     let width = video.videoWidth;
     let height = video.videoHeight;
-    if (canvas.width < canvas.height) {
-        canvas.height=canvas.height*0.8;
-    }
+     
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let posX = width * 0.28;
@@ -293,9 +291,10 @@ function buildCanvas() {
     let vposY = 15;
     if (canvas.width < canvas.height) {
         posX = width * 0.23;
-        posY = height * 0.7;
+        posY = height * 0.5;
         vposX = width * 0.32;
-        vposY = height * 0.22;
+        vposY = height * 0.18;
+        canvas.height=canvas.height*0.7;
     }
     function loop() {
         console.log('loop');
