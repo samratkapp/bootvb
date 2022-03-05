@@ -264,15 +264,7 @@ function buildCanvas() {
     let posY = height * 0.5;
     let vposX = width * 0.30;
     let vposY = 15;
-    if (canvas.width < canvas.height) {
-        posX = width * 0.23;
-        posY = height * 0.7;
-        vposX = width * 0.32;
-        vposY = height * 0.22;
-    }
-    console.log(window.innerWidth);
-    console.log(window.innerHeight);
-
+   
     if(window.innerWidth<window.innerHeight){
         posY = height * 0.55;
     }
