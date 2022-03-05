@@ -295,7 +295,7 @@ function buildCanvas() {
         posY = height * 0.37;
         vposX = width * 0.32;
         vposY = height * 0.15;
-        canvas.height = canvas.height * 0.7;
+        
         console.log('width', width, ' height', height);
     }
     function loop() {
