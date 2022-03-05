@@ -33,9 +33,6 @@ const virtualBackgroundForm = document.querySelector('form#virtualBackground-For
 const virtualBackgroundButton = document.querySelector('button#virtualBackground-Apply');
 const videoInput = document.querySelector('video#video-input');
 const removeProcessorButton = document.querySelector('button#remove-processor');
-// const errorMessage = document.querySelector('div.modal-body');
-// const errorModal = new bootstrap.Modal(document.querySelector('div#errorModal'));
-// const overlay = document.querySelector('div#overlay');
 const stopvid = document.querySelector('button#stopvid');
 const playvidBtn = document.querySelector('button#playvidBtn');
 
@@ -47,7 +44,6 @@ divBgi.style.display='none';
 stopvid.disabled = true;
 virtualBackgroundButton.disabled = true;
 
-// Same directory as the current js file
 const assetsPath = '';
 
 var videoTrack;
@@ -66,16 +62,8 @@ const loadImage = (name) =>
 let images = {};
 
 Promise.all([
-    // loadImage('back1'),
-    // loadImage('back2'),
-    // loadImage('back3'),
-    // loadImage('back4'),
     loadImage('back5'),
-]).then(([back5]) => {  //back1, back2, back3, back4,
-    // images.back1 = back1;
-    // images.back2 = back2;
-    // images.back3 = back3;
-    // images.back4 = back4;
+]).then(([back5]) => { 
     images.back5 = back5;
     return images;
 });
@@ -90,8 +78,6 @@ function playvid() {
     virtualBackgroundButton.disabled = false;
     btnrecord.disabled = false;
     videoTrack;
-
-
 
     Video.createLocalTracks({
         audio: {
@@ -108,10 +94,7 @@ function playvid() {
             console.log(track);
             window.videoTrack = track;
             setVirtualBg(track);
-            //    setTimeout(() => {
-            //     track.attach(videoInput); 
-            //    }, 0);
-
+             
             if (track.name == 'camera') {
 
             }
@@ -124,12 +107,9 @@ function playvid() {
 
 const setProcessor = (processor, track) => {
     if (track.processor) {
-        // overlay.style.display = 'none';
-        // removeProcessorButton.disabled = true;
         track.removeProcessor(track.processor);
     }
     if (processor && track) {
-        // removeProcessorButton.disabled = false;
         track.addProcessor(processor);
     }
 };
@@ -164,14 +144,11 @@ virtualBackgroundButton.onclick = event => {
 };
 
 function removeBg() {
-    // overlay.style.display = 'none';
-    // videoTrack.removeProcessor(videoTrack.processor);
     setProcessor(null, videoTrack);
 }
 stopvid.onclick = event => {
     divBgi.style.display='none';
     // clearTimeout(stopLoop);
-    // the cancellation uses the last requestId
     window.cancelAnimationFrame(myReq);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -210,9 +187,7 @@ btnrecord.onclick = async function () {
 
     let vstream = videoInput.srcObject;
     let canvasStream = canvas.captureStream(60);
-    // console.log(videoTrack);
-
-    // var finalStream = new MediaStream();
+    
 
     getTracks(vstream, 'audio').forEach(function (track) {
         canvasStream.addTrack(track);
@@ -295,9 +270,13 @@ function buildCanvas() {
         vposX = width * 0.32;
         vposY = height * 0.22;
     }
+    console.log(window.innerWidth);
+    console.log(window.innerHeight);
+
     if(window.innerWidth<window.innerHeight){
-        posY = height * 0.38;
+        posY = height * 0.55;
     }
+    console.log(posY);
     function loop() {
         console.log('loop');
 
