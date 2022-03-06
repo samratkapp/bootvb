@@ -39,7 +39,7 @@ const playvidBtn = document.querySelector('button#playvidBtn');
 let canvas = window.canvas = document.querySelector('canvas');
 
 const divBgi = document.querySelector('div#divBgi');
-divBgi.style.display='none';
+divBgi.style.display = 'none';
 
 stopvid.disabled = true;
 virtualBackgroundButton.disabled = true;
@@ -48,9 +48,8 @@ const assetsPath = '';
 
 var videoTrack;
 let gaussianBlurProcessor;
-// let virtualBackgroundProcessor;
-
-
+let virtualBGProcessor;
+let video = document.querySelector('video');
 
 const loadImage = (name) =>
     new Promise((resolve) => {
@@ -61,18 +60,37 @@ const loadImage = (name) =>
 
 let images = {};
 
-Promise.all([
-    loadImage('back5'),
-]).then(([back5]) => { 
-    images.back5 = back5;
-    return images;
-});
+// Promise.all([
+//     loadImage('back5'),
+// ]).then(([back5]) => {
+//     images.back5 = back5;
+//     return images;
+// });
 
-let video = document.querySelector('video');
+
+
+async function loadVirtualBGProcessor() {
+    const options = {};
+    var back5 = await loadImage('back5');
+    console.log('back5== ', back5);
+    images.back5 = back5;
+    let backgroundImage = back5;
+
+    let { maskBlurRadius, fitType } = options;
+
+    virtualBGProcessor = new VirtualBackgroundProcessor({
+        assetsPath,
+        maskBlurRadius,
+        backgroundImage,
+        fitType,
+    });
+    await virtualBGProcessor.loadModel();
+}
+
 
 function playvid() {
-    divBgi.style.display='block';
-    
+    divBgi.style.display = 'block';
+
     playvidBtn.disabled = true;
     stopvid.disabled = false;
     virtualBackgroundButton.disabled = false;
@@ -93,12 +111,12 @@ function playvid() {
         tracks.forEach(function (track) {
             console.log(track);
             window.videoTrack = track;
-            setVirtualBg(track);
-             
             if (track.name == 'camera') {
 
             }
         });
+        setProcessor(virtualBGProcessor, videoTrack);
+        videoTrack.attach(videoInput);
     });
 
 
@@ -114,40 +132,18 @@ const setProcessor = (processor, track) => {
     }
 };
 
-async function setVirtualBg(track) {
-    const options = {};
-
-    let backgroundImage = images['back5'];
-    console.log(backgroundImage)
-
-    let { maskBlurRadius, fitType } = options;
-
-    let virtualBackgroundProcessor = new VirtualBackgroundProcessor({
-        assetsPath,
-        maskBlurRadius,
-        backgroundImage,
-        fitType,
-    });
-    await virtualBackgroundProcessor.loadModel();
-    // overlay.style.display = 'block';
-
-    setProcessor(virtualBackgroundProcessor, videoTrack);
-    // overlay.style.display = 'block';
-    track.attach(videoInput);
-}
 
 virtualBackgroundButton.onclick = event => {
     event.preventDefault();
     console.log(event);
     virtualBackgroundButton.disabled = true;
-    // setVirtualBg();
 };
 
 function removeBg() {
     setProcessor(null, videoTrack);
 }
 stopvid.onclick = event => {
-    divBgi.style.display='none';
+    divBgi.style.display = 'none';
     // clearTimeout(stopLoop);
     window.cancelAnimationFrame(myReq);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -187,7 +183,7 @@ btnrecord.onclick = async function () {
 
     let vstream = videoInput.srcObject;
     let canvasStream = canvas.captureStream(60);
-    
+
 
     getTracks(vstream, 'audio').forEach(function (track) {
         canvasStream.addTrack(track);
@@ -225,13 +221,10 @@ function setSelectBackground(event, value) {
     selectedImg.classList.remove("selected");
     event.classList.add("selected");
     bgImage = value;
-    document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
+    // document.getElementById("canvas").style.backgroundImage = `url(./backgrounds/${value}.jpg)`;
     buildCanvas();
 }
 
-/****INVOKE FUNCTION****/
-
-// playvid();
 
 /***CANVAS IMAGE****/
 
@@ -257,15 +250,15 @@ function buildCanvas() {
 
     let width = video.videoWidth;
     let height = video.videoHeight;
-   
+
     let size = 0.60;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let posX = width * 0.28;
     let posY = height * 0.5;
     let vposX = width * 0.30;
     let vposY = 15;
-   
-    if(window.innerWidth<window.innerHeight){
+
+    if (window.innerWidth < window.innerHeight) {
         posY = height * 0.55;
     }
     console.log(posY);
@@ -292,3 +285,9 @@ video.addEventListener('play', function () {
 }, 0);
 
 
+
+/****INVOKE FUNCTION****/
+
+// playvid();
+
+loadVirtualBGProcessor();
