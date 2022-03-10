@@ -89,7 +89,7 @@ async function loadVirtualBGProcessor() {
 
 
 function playvid() {
-    divBgi.style.display = 'block';
+    // divBgi.style.display = 'block';
 
     playvidBtn.disabled = true;
     stopvid.disabled = false;
